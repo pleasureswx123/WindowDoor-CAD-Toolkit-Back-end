@@ -93,6 +93,20 @@ export const constantRoutes = [
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
   {
+    path: '/system/design',
+    component: Layout,
+    hidden: false,
+    permissions: ['system:design:list'],
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/system/design/index'),
+        name: 'Design',
+        meta: { title: '窗户设计管理', icon: 'tool', activeMenu: '/system/design' }
+      }
+    ]
+  },
+  {
     path: '/system/user-auth',
     component: Layout,
     hidden: true,
@@ -165,8 +179,8 @@ export const dynamicRoutes = [
 ]
 
 // 防止连续点击多次路由报错
-let routerPush = Router.prototype.push;
-let routerReplace = Router.prototype.replace;
+const routerPush = Router.prototype.push
+const routerReplace = Router.prototype.replace
 // push
 Router.prototype.push = function push(location) {
   return routerPush.call(this, location).catch(err => err)
