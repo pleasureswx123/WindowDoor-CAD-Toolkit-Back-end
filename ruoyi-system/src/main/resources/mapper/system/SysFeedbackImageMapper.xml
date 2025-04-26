@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysFeedbackImageMapper">
+    
+    <resultMap type="SysFeedbackImage" id="SysFeedbackImageResult">
+        <result property="id"    column="id"    />
+        <result property="feedbackId"    column="feedback_id"    />
+        <result property="imageUrl"    column="image_url"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectSysFeedbackImageVo">
+        select id, feedback_id, image_url, create_time from sys_feedback_image
+    </sql>
+
+    <select id="selectSysFeedbackImageList" parameterType="SysFeedbackImage" resultMap="SysFeedbackImageResult">
+        <include refid="selectSysFeedbackImageVo"/>
+        <where>  
+            <if test="feedbackId != null "> and feedback_id = #{feedbackId}</if>
+            <if test="imageUrl != null  and imageUrl != ''"> and image_url = #{imageUrl}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysFeedbackImageById" parameterType="Long" resultMap="SysFeedbackImageResult">
+        <include refid="selectSysFeedbackImageVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysFeedbackImage" parameterType="SysFeedbackImage" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_feedback_image
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="feedbackId != null">feedback_id,</if>
+            <if test="imageUrl != null and imageUrl != ''">image_url,</if>
+            <if test="createTime != null">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="feedbackId != null">#{feedbackId},</if>
+            <if test="imageUrl != null and imageUrl != ''">#{imageUrl},</if>
+            <if test="createTime != null">#{createTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysFeedbackImage" parameterType="SysFeedbackImage">
+        update sys_feedback_image
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="feedbackId != null">feedback_id = #{feedbackId},</if>
+            <if test="imageUrl != null and imageUrl != ''">image_url = #{imageUrl},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysFeedbackImageById" parameterType="Long">
+        delete from sys_feedback_image where id = #{id}
+    </delete>
+
+    <delete id="deleteSysFeedbackImageByIds" parameterType="String">
+        delete from sys_feedback_image where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

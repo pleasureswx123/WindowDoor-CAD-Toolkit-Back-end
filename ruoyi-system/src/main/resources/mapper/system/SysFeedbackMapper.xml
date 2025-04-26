@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysFeedbackMapper">
+    
+    <resultMap type="SysFeedback" id="SysFeedbackResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="feedbackType"    column="feedback_type"    />
+        <result property="description"    column="description"    />
+        <result property="priority"    column="priority"    />
+        <result property="contact"    column="contact"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="handlerId"    column="handler_id"    />
+        <result property="handlerComment"    column="handler_comment"    />
+    </resultMap>
+
+    <sql id="selectSysFeedbackVo">
+        select id, user_id, feedback_type, description, priority, contact, status, create_time, update_time, handler_id, handler_comment from sys_feedback
+    </sql>
+
+    <select id="selectSysFeedbackList" parameterType="SysFeedback" resultMap="SysFeedbackResult">
+        <include refid="selectSysFeedbackVo"/>
+        <where>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="feedbackType != null  and feedbackType != ''"> and feedback_type = #{feedbackType}</if>
+            <if test="description != null  and description != ''"> and description = #{description}</if>
+            <if test="priority != null  and priority != ''"> and priority = #{priority}</if>
+            <if test="contact != null  and contact != ''"> and contact = #{contact}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="handlerId != null "> and handler_id = #{handlerId}</if>
+            <if test="handlerComment != null  and handlerComment != ''"> and handler_comment = #{handlerComment}</if>
+        </where>
+    </select>
+    
+    <select id="selectSysFeedbackById" parameterType="Long" resultMap="SysFeedbackResult">
+        <include refid="selectSysFeedbackVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertSysFeedback" parameterType="SysFeedback" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_feedback
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="feedbackType != null and feedbackType != ''">feedback_type,</if>
+            <if test="description != null and description != ''">description,</if>
+            <if test="priority != null and priority != ''">priority,</if>
+            <if test="contact != null">contact,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="handlerId != null">handler_id,</if>
+            <if test="handlerComment != null">handler_comment,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="feedbackType != null and feedbackType != ''">#{feedbackType},</if>
+            <if test="description != null and description != ''">#{description},</if>
+            <if test="priority != null and priority != ''">#{priority},</if>
+            <if test="contact != null">#{contact},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="handlerId != null">#{handlerId},</if>
+            <if test="handlerComment != null">#{handlerComment},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSysFeedback" parameterType="SysFeedback">
+        update sys_feedback
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="feedbackType != null and feedbackType != ''">feedback_type = #{feedbackType},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+            <if test="priority != null and priority != ''">priority = #{priority},</if>
+            <if test="contact != null">contact = #{contact},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="handlerId != null">handler_id = #{handlerId},</if>
+            <if test="handlerComment != null">handler_comment = #{handlerComment},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSysFeedbackById" parameterType="Long">
+        delete from sys_feedback where id = #{id}
+    </delete>
+
+    <delete id="deleteSysFeedbackByIds" parameterType="String">
+        delete from sys_feedback where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
