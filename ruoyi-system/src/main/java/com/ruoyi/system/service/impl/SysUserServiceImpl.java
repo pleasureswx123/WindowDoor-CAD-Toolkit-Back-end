@@ -276,9 +276,20 @@ public class SysUserServiceImpl implements ISysUserService
      * @return 结果
      */
     @Override
+    @Transactional
     public boolean registerUser(SysUser user)
     {
-        return userMapper.insertUser(user) > 0;
+        int res = userMapper.insertUser(user);
+        // 获取用户 ID（需确保 MyBatis 配置了 useGeneratedKeys）
+        Long userId1 = user.getUserId();
+        // 打印userId1
+        log.info("userId1 user 用户信息: {}", userId1);
+        Long userId = userMapper.selectUserByUserName(user.getUserName()).getUserId();
+        // 打印userId
+        log.info("userId user 用户信息: {}", userId);
+        // 分配角色（假设普通角色 ID 为 2）
+        insertUserRole(userId, new Long[] { 2L });
+        return res > 0;
     }
 
     /**
